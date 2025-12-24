@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="logo.png" type="image/png">
+<title>Voice Artist</title>
+<style>
+/* ===== RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* ===== BODY ===== */
+body {
+  background: radial-gradient(circle at top, hsl(42, 100%, 50%), hsl(40, 100%, 50%));
+  color: #fff;
+  min-height: 100vh;
+}
+
+/* ===== HEADER ===== */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #1f1f1f, #0c0c0c);
+  border-bottom: 1px solid #222;
+}
+
+.logo img {
+  height: 40px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.nav.bar a {
+  color: #fff !important;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.nav.bar a:hover {
+  color: #00e5ff !important;
+}
+
+/* ===== MAIN SECTION ===== */
+section {
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
+}
+
+section h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 26px;
+}
+
+/* ===== RECORD BUTTON ===== */
+#record {
+  display: block;
+  margin: 10px auto 15px;
+  padding: 14px 26px;
+  font-size: 18px;
+  border: none;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #ff4d4d, #ff3700);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(255, 77, 77, 0.4);
+}
+
+#record:hover {
+  transform: scale(1.05);
+}
+
+/* ===== WAVEFORM ===== */
+#waveform {
+  width: 100%;
+  height: 180px;
+  margin: 15px 0;
+  border-radius: 12px;
+  background: #0a0a0a;
+  border: 1px solid #1f1f1f;
+}
+
+/* ===== CONTROLS ===== */
+.control {
+  margin: 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.control label {
+  font-size: 14px;
+  color: #aaa;
+}
+
+.control input[type="file"] {
+  background: #111;
+  padding: 8px;
+  border-radius: 6px;
+  color: #ccc;
+}
+
+.control input[type="range"] {
+  width: 100%;
+}
+
+.control select {
+  padding: 8px;
+  border-radius: 6px;
+  background: #111;
+  color: #fff;
+  border: 1px solid #333;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.actions {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.actions button {
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  color: #000000;
+  font-weight: 600;
+  background: linear-gradient(135deg, #fdfefd, #fdfdfc);
+  box-shadow: 0 3px 10px rgba(255, 170, 0, 0.3);
+}
+
+.actions button:hover {
+  transform: translateY(-2px);
+}
+
+/* ===== SPECIAL STATES ===== */
+button.recording {
+  background: linear-gradient(135deg, #ff0000, #b00000) !important;
+  color: #fff;
+}
+
+button.playing {
+  background: linear-gradient(135deg, #f6fcfa, #f1f6f5) !important;
+  color: #f75555;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  section h1 {
+    font-size: 22px;
+  }
+
+  #waveform {
+    height: 140px;
+  }
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+  <div class="logo"><img src="logo.png" ></div>
+  <div class="title">Voice Artist</div>
+  <div class="nav bar">
+    <!-- Navigation items can be added here -->
+     <a href="Voice artist.html" style="color:#000; text-decoration:none; font-weight:600; margin-left:20px;">Studio</a>
+     <a href="Create.html" style="color:#000; text-decoration:none; font-weight:600; margin-left:20px;">Create</a>
+  </div>
+
+</header>
+
+<section>
+<h1>Create Your Voice</h1>
+
+<button id="record">🎤 Record</button>
+<canvas id="waveform"></canvas>
+
+<div class="control">
+<input type="file" id="upload" accept="audio/*">
+</div>
+
+<div class="control">
+<label>Pitch</label>
+<input type="range" id="pitch" min="-12" max="12" value="0">
+</div>
+
+<div class="control">
+<label>Voice Tone</label>
+<select id="tone">
+  <option value="normal">Normal</option>
+  <option value="happy">Happy</option>
+  <option value="sad">Sad</option>
+  <option value="fun">Fun</option>
+</select>
+</div>
+
+<div class="actions">
+<button id="preview">▶ Preview</button>
+<button id="download">⬇ Download</button>
+<button id="pro">✨ Pro Voice</button>
+<button id="cut">✂ Cut Silence</button>
+<button id="echo">🔁 Echo</button>
+<button id="reverb">💧 Reverb</button>
+<button id="capture">📌 Capture Nearest Sound</button>
+<button id="save">💾 Save</button>
+<button id="openLibrary">📚 Library (<span id="libCount">0</span>)</button>
+</div>
+
+</section>
+<script>
+
+'use strict';
+
+class VoiceStudio {
+  constructor() {
+    this.ctxAudio = null;
+    this.recorder = null;
+    this.analyser = null;
+    this.stream = null;
+
+    this.audioChunks = [];
+    this.audioBuffer = null;
+
+    this.isRecording = false;
+    this.isPlaying = false;
+
+    this.pitch = 0;
+    this.echoOn = false;
+    this.reverbOn = false;
+    this.captureOn = false;
+
+    this.recordBtn = record;
+    this.previewBtn = preview;
+    this.echoBtn = echo;
+    this.reverbBtn = reverb;
+    this.captureBtn = capture;
+    this.cutBtn = cut;
+    this.saveBtn = save;
+    this.downloadBtn = download;
+    this.pitchSlider = pitch;
+    this.libCount = libCount;
+
+    this.canvas = waveform;
+    this.ctx = this.canvas.getContext('2d');
+    this.anim = null;
+
+    this.init();
+  }
+
+  init() {
+    this.resize();
+    window.onresize = () => this.resize();
+
+    record.onclick = () => this.toggleRecord();
+    pro.onclick = () => alert('Pro Voice feature coming soon!');
+    preview.onclick = () => this.play();
+    echo.onclick = () => this.toggle('echo');
+    reverb.onclick = () => this.toggle('reverb');
+    capture.onclick = () => this.toggle('capture');
+    cut.onclick = () => this.cutSilence();
+    save.onclick = () => this.saveLib();
+    download.onclick = () => this.exportWav();
+
+    pitch.oninput = e => this.pitch = +e.target.value;
+    this.updateLib();
+  }
+
+  resize() {
+    this.canvas.width = this.canvas.clientWidth;
+    this.canvas.height = 160;
+  }
+
+  green(btn, on) {
+    btn.style.background = on ? 'linear-gradient(135deg,#00ff88,#00c853)' : '';
+    btn.style.color = on ? '#000' : '';
+  }
+
+  async ctxInit() {
+    if (!this.ctxAudio) {
+      this.ctxAudio = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (this.ctxAudio.state === 'suspended') {
+      await this.ctxAudio.resume();
+    }
+  }
+
+  async toggleRecord() {
+    if (this.isRecording) return this.stopRecord();
+    await this.ctxInit();
+
+    this.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    this.recorder = new MediaRecorder(this.stream);
+    this.audioChunks = [];
+
+    const source = this.ctxAudio.createMediaStreamSource(this.stream);
+    this.analyser = this.ctxAudio.createAnalyser();
+    this.analyser.fftSize = 2048;
+
+    let last = source;
+
+    if (this.captureOn) {
+      const comp = this.ctxAudio.createDynamicsCompressor();
+      comp.threshold.value = -40;
+      comp.ratio.value = 12;
+      last.connect(comp);
+      last = comp;
+    }
+
+    last.connect(this.analyser);
+
+    this.recorder.ondataavailable = e => e.data.size && this.audioChunks.push(e.data);
+
+    this.recorder.onstop = async () => {
+      const blob = new Blob(this.audioChunks);
+      const buf = await blob.arrayBuffer();
+      this.audioBuffer = await this.ctxAudio.decodeAudioData(buf);
+      this.stream.getTracks().forEach(t => t.stop());
+      cancelAnimationFrame(this.anim);
+      this.drawStatic();
+    };
+
+    this.recorder.start();
+    this.isRecording = true;
+    record.textContent = '⏹ Stop';
+    this.green(record, true);
+    this.drawLive();
+  }
+
+  stopRecord() {
+    this.recorder.stop();
+    this.isRecording = false;
+    record.textContent = '🎤 Record';
+    this.green(record, false);
+  }
+
+  play() {
+    if (!this.audioBuffer || this.isPlaying) return;
+    const src = this.ctxAudio.createBufferSource();
+    src.buffer = this.audioBuffer;
+    src.playbackRate.value = Math.pow(2, this.pitch / 12);
+
+    let last = src;
+
+    if (this.echoOn) {
+      const d = this.ctxAudio.createDelay();
+      d.delayTime.value = .25;
+      const g = this.ctxAudio.createGain();
+      g.gain.value = .35;
+      d.connect(g);
+      g.connect(d);
+      last.connect(d);
+      last = d;
+    }
+
+    if (this.reverbOn) {
+      const conv = this.ctxAudio.createConvolver();
+      conv.buffer = this.impulse();
+      last.connect(conv);
+      last = conv;
+    }
+
+    this.analyser = this.ctxAudio.createAnalyser();
+    last.connect(this.analyser);
+    this.analyser.connect(this.ctxAudio.destination);
+
+    src.start();
+    this.isPlaying = true;
+    this.green(preview, true);
+    this.drawLive();
+
+    src.onended = () => {
+      this.isPlaying = false;
+      this.green(preview, false);
+      cancelAnimationFrame(this.anim);
+      this.drawStatic();
+    };
+  }
+
+  toggle(type) {
+    this[type + 'On'] = !this[type + 'On'];
+    this.green(this[type + 'Btn'], this[type + 'On']);
+  }
+
+  impulse() {
+    const len = this.ctxAudio.sampleRate * 2;
+    const b = this.ctxAudio.createBuffer(2, len, this.ctxAudio.sampleRate);
+    for (let c = 0; c < 2; c++) {
+      const d = b.getChannelData(c);
+      for (let i = 0; i < len; i++) {
+        d[i] = (Math.random() * 2 - 1) * (1 - i / len);
+      }
+    }
+    return b;
+  }
+
+  cutSilence() {
+    if (!this.audioBuffer) return;
+    const d = this.audioBuffer.getChannelData(0);
+    let s = 0, e = d.length - 1;
+    while (Math.abs(d[s]) < 0.02 && s < e) s++;
+    while (Math.abs(d[e]) < 0.02 && e > s) e--;
+    const nb = this.ctxAudio.createBuffer(1, e - s, this.ctxAudio.sampleRate);
+    nb.copyToChannel(d.slice(s, e), 0);
+    this.audioBuffer = nb;
+    this.drawStatic();
+  }
+
+  saveLib() {
+    const lib = JSON.parse(localStorage.voiceLib || '[]');
+    lib.push({ time: Date.now() });
+    localStorage.voiceLib = JSON.stringify(lib);
+    this.updateLib();
+    this.green(save, true);
+    setTimeout(() => this.green(save, false), 600);
+  }
+
+  updateLib() {
+    this.libCount.textContent = JSON.parse(localStorage.voiceLib || '[]').length;
+  }
+
+  exportWav() {
+    if (!this.audioBuffer) return;
+    const wav = this.toWav(this.audioBuffer);
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([wav], { type: 'audio/wav' }));
+    a.download = 'voice.wav';
+    a.click();
+  }
+
+  toWav(buf) {
+    const ch = buf.numberOfChannels;
+    const len = buf.length * ch * 2 + 44;
+    const ab = new ArrayBuffer(len);
+    const v = new DataView(ab);
+    let p = 0;
+    const w = s => { for (let i = 0; i < s.length; i++) v.setUint8(p++, s.charCodeAt(i)); };
+    w('RIFF'); v.setUint32(p, len - 8, true); p += 4;
+    w('WAVEfmt '); v.setUint32(p, 16, true); p += 4;
+    v.setUint16(p, 1, true); p += 2;
+    v.setUint16(p, ch, true); p += 2;
+    v.setUint32(p, buf.sampleRate, true); p += 4;
+    v.setUint32(p, buf.sampleRate * ch * 2, true); p += 4;
+    v.setUint16(p, ch * 2, true); p += 2;
+    v.setUint16(p, 16, true); p += 2;
+    w('data'); v.setUint32(p, len - p - 4, true); p += 4;
+    for (let i = 0; i < buf.length; i++) {
+      for (let c = 0; c < ch; c++) {
+        let s = buf.getChannelData(c)[i];
+        v.setInt16(p, s * 0x7fff, true);
+        p += 2;
+      }
+    }
+    return ab;
+  }
+
+  drawLive() {
+    const d = new Uint8Array(this.analyser.fftSize);
+    const f = () => {
+      this.anim = requestAnimationFrame(f);
+      this.analyser.getByteTimeDomainData(d);
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.beginPath();
+      let x = 0;
+      const s = this.canvas.width / d.length;
+      for (let i = 0; i < d.length; i++) {
+        const y = (d[i] / 128) * this.canvas.height / 2;
+        i ? this.ctx.lineTo(x, y) : this.ctx.moveTo(x, y);
+        x += s;
+      }
+      this.ctx.strokeStyle = '#00e5ff';
+      this.ctx.stroke();
+    };
+    f();
+  }
+
+  drawStatic() {
+    const d = this.audioBuffer.getChannelData(0);
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.beginPath();
+    const step = Math.ceil(d.length / this.canvas.width);
+    for (let i = 0; i < this.canvas.width; i++) {
+      let min = 1, max = -1;
+      for (let j = 0; j < step; j++) {
+        const v = d[i * step + j] || 0;
+        min = Math.min(min, v);
+        max = Math.max(max, v);
+      }
+      this.ctx.moveTo(i, (1 + min) * 80);
+      this.ctx.lineTo(i, (1 + max) * 80);
+    }
+    this.ctx.strokeStyle = '#00e5ff';
+    this.ctx.stroke();
+  }
+}
+
+window.onload = () => new VoiceStudio();
+</script>
+</body>
+</html>
